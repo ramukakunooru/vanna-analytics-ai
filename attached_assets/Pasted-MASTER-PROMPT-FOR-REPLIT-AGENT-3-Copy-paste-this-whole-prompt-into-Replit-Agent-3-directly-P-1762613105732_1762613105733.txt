@@ -1,0 +1,345 @@
+MASTER PROMPT FOR REPLIT AGENT 3
+
+(Copy-paste this whole prompt into Replit Agent 3 directly.)
+
+🔰 PROJECT TITLE:
+
+AI-Powered Analytics Dashboard with “Chat with Data” Interface (Full-stack, Production-ready)
+
+🧱 PROJECT OVERVIEW:
+
+You are building a production-grade, full-stack web application consisting of two major modules:
+
+Interactive Analytics Dashboard — pixel-perfect to Figma design, fully data-driven.
+
+“Chat with Data” Interface — powered by self-hosted Vanna AI + Groq/LLM, enabling natural-language analytics on the same dataset.
+
+The application will use a monorepo with separate apps for frontend, backend, and the AI service.
+
+🧰 TECH STACK REQUIREMENTS:
+🧱 Monorepo
+
+Use Turborepo or npm workspaces.
+
+Structure:
+
+/apps
+  /web        → Next.js frontend
+  /api        → Node.js backend
+  /services
+    /vanna    → Python FastAPI service (self-hosted AI)
+/data         → contains Analytics_Test_Data.json
+
+🖥 Frontend (apps/web)
+
+Framework: Next.js (App Router)
+
+Language: TypeScript
+
+Styling: TailwindCSS + shadcn/ui
+
+Charts: Chart.js or Recharts
+
+Must match the provided Figma Dashboard design pixel-perfectly.
+
+Deploy on Vercel
+
+⚙️ Backend (apps/api)
+
+Runtime: Node.js
+
+Framework: Express.js (or Next.js API routes)
+
+ORM: Prisma or Drizzle
+
+Database: PostgreSQL
+
+APIs: REST endpoints listed below
+
+Deploy alongside frontend on Vercel
+
+🤖 AI Layer (apps/services/vanna)
+
+Framework: Python FastAPI
+
+Uses self-hosted Vanna AI
+
+Connects directly to PostgreSQL
+
+Uses Groq API for SQL generation
+
+Accepts natural language → generates SQL → runs query → returns JSON results
+
+Deployable on Render / Railway / Fly.io / Docker
+
+📦 DATASET:
+
+You are given Analytics_Test_Data.json containing real-world invoice and vendor data with nested structures.
+
+You must:
+
+Create a PostgreSQL database
+
+Normalize JSON into tables like:
+
+vendors
+
+customers
+
+invoices
+
+line_items
+
+payments
+
+Maintain referential integrity, data types, and primary/foreign keys
+
+Include a seed script that imports this JSON data into the database
+
+📊 FRONTEND MODULE 1: ANALYTICS DASHBOARD
+
+Components Required:
+
+Overview cards:
+
+Total Spend (YTD)
+
+Total Invoices Processed
+
+Documents Uploaded
+
+Average Invoice Value
+(→ values from /stats API)
+
+Charts:
+
+Invoice Volume + Value Trend (Line Chart)
+
+Spend by Vendor (Top 10, Horizontal Bar Chart)
+
+Spend by Category (Pie Chart)
+
+Cash Outflow Forecast (Bar Chart)
+
+Invoices Table:
+
+Scrollable, searchable, sortable
+
+Shows: vendor, date, invoice number, amount, status
+
+Data from /invoices API
+
+Frontend must:
+
+Use shadcn/ui for cards, tables, and layout
+
+Use Tailwind for responsiveness
+
+Use Recharts or Chart.js for visualizations
+
+💬 FRONTEND MODULE 2: “CHAT WITH DATA”
+
+Sidebar Tab: “Chat with Data”
+
+Simple chat interface with input box + streaming responses
+
+User types natural-language queries like:
+
+“What’s the total spend in the last 90 days?”
+
+“List top 5 vendors by spend.”
+
+“Show overdue invoices as of today.”
+
+Chat Flow:
+
+Frontend → /chat-with-data API
+
+Backend proxies → Vanna AI server
+
+Vanna AI → Generates SQL → Executes → Returns JSON
+
+Frontend displays:
+
+Generated SQL
+
+Results table
+
+Optional chart (if structured data returned)
+
+🧩 BACKEND API ENDPOINTS
+
+Implement these routes:
+
+Endpoint	Method	Description
+/stats	GET	Overview totals
+/invoice-trends	GET	Monthly invoice count & spend
+/vendors/top10	GET	Top 10 vendors by spend
+/category-spend	GET	Spend by category
+/cash-outflow	GET	Forecasted outflow
+/invoices	GET	List of invoices (search/filter support)
+/chat-with-data	POST	Proxy to Vanna AI (returns SQL + data)
+⚙️ ENVIRONMENT VARIABLES
+# Frontend
+NEXT_PUBLIC_API_BASE=/api
+NEXT_PUBLIC_APP_URL=https://<your-app>.vercel.app
+
+# Backend
+DATABASE_URL=postgresql://user:pass@host:5432/dbname
+VANNA_API_BASE_URL=https://<your-vanna-host>
+VANNA_API_KEY=<if any>
+
+# Vanna AI (Python)
+DATABASE_URL=postgresql+psycopg://user:pass@host:5432/dbname
+GROQ_API_KEY=your_groq_api_key
+PORT=8000
+
+🧱 DATABASE DESIGN (suggested schema)
+
+vendors
+
+id (PK)
+
+name
+
+category
+
+contact_email
+
+customers
+
+id (PK)
+
+name
+
+region
+
+invoices
+
+id (PK)
+
+vendor_id (FK → vendors.id)
+
+customer_id (FK → customers.id)
+
+invoice_number
+
+date_issued
+
+due_date
+
+amount
+
+status
+
+line_items
+
+id (PK)
+
+invoice_id (FK → invoices.id)
+
+description
+
+quantity
+
+unit_price
+
+payments
+
+id (PK)
+
+invoice_id (FK → invoices.id)
+
+date_paid
+
+amount_paid
+
+payment_method
+
+🚀 DEPLOYMENT REQUIREMENTS
+
+Frontend + Backend: Host together on Vercel
+
+Vanna AI: Host separately (Render / Railway / Fly.io / Docker)
+
+Ensure CORS enabled for Vercel domain
+
+Include Dockerfile + docker-compose.yml for local setup (PostgreSQL + services)
+
+🧾 DOCUMENTATION REQUIREMENTS
+
+Create a top-level README.md including:
+
+Project Overview
+
+Tech Stack
+
+Setup Instructions
+
+How to run locally (npm install, npm run dev)
+
+Database setup (npx prisma migrate, npx prisma db seed)
+
+Environment Variables
+
+API Documentation (with examples)
+
+Vanna AI Workflow Explanation
+
+Deployment Instructions
+
+ER Diagram / Schema Overview
+
+Demo Video instructions
+
+🎁 BONUS FEATURES (optional)
+
+If possible, include:
+
+Persistent Chat History
+
+CSV / Excel export
+
+Role-based access
+
+Additional analytics charts
+
+Unit tests
+
+Docker setup for all services
+
+✅ OUTPUT EXPECTATION FOR REPLIT AGENT:
+
+Replit Agent 3 should:
+
+Initialize Turborepo monorepo.
+
+Set up Next.js (apps/web) + Express/Prisma backend (apps/api) + FastAPI (apps/services/vanna).
+
+Create PostgreSQL schema + seed script for Analytics_Test_Data.json.
+
+Implement all backend APIs.
+
+Implement frontend UI per Figma.
+
+Build Chat-with-Data integration (frontend → API → Vanna → SQL → DB → result).
+
+Add full documentation, Docker support, and environment configs.
+
+Prepare for deployment (Vercel + self-hosted Vanna).
+
+💬 FINAL NOTE
+
+Please build the entire project end-to-end, ensuring:
+
+Clean modular folder structure
+
+TypeScript typing throughout
+
+Fully working APIs
+
+AI query integration functional
+
+Deployment-ready code
+
+End of Prompt
