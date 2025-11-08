@@ -44,7 +44,7 @@ function Navigation() {
               const isActive = location === item.path;
               return (
                 <Link key={item.path} href={item.path}>
-                  <a
+                  <button
                     className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors hover-elevate ${
                       isActive
                         ? 'bg-primary/10 text-primary'
@@ -54,7 +54,7 @@ function Navigation() {
                   >
                     <Icon className="w-4 h-4" />
                     {item.label}
-                  </a>
+                  </button>
                 </Link>
               );
             })}
